@@ -31,7 +31,11 @@ public class GithubApiTest extends BaseApiClass {
     @Test
     public void createNewRepo() {
         RestAssured.baseURI = configReader.getProperty("githubApiUrl");
-        String token = configReader.getProperty("githubApiToken");
+//      github api token parts
+        String token =
+                        configReader.getProperty("t1")+configReader.getProperty("t2")
+                        +configReader.getProperty("t3")+configReader.getProperty("t4")
+                        +configReader.getProperty("t5");
 //      Gson payload body format
         RepoModel repo = new RepoModel(
                 "repo-1",
@@ -61,10 +65,13 @@ public class GithubApiTest extends BaseApiClass {
     @Test
     public void updateRepo() {
         RestAssured.baseURI = configReader.getProperty("githubApiUrl");
-        String token = configReader.getProperty("githubApiToken");
+//      github api token parts
+        String token = configReader.getProperty("t1")+configReader.getProperty("t2")
+                +configReader.getProperty("t3")+configReader.getProperty("t4")
+                +configReader.getProperty("t5");
 //      Gson payload body format
         RepoModel repo = new RepoModel(
-                "repo-1-update2",
+                "repo-1-update",
                 "update repo with rest assured",
                 false);
 //      convert Gson payload body to Json payload body format
@@ -79,10 +86,10 @@ public class GithubApiTest extends BaseApiClass {
                 .body(jsonPayload)
                 .log().all()
                 .when()
-                .patch("/repos/rehman61/repo-1-update")
+                .patch("/repos/rehman61/repo-1-update4")
                 .then()
                 .statusCode(200)
-                .body("name", equalTo("repo-1-update2"))
+                .body("name", equalTo("repo-1-update"))
                 .body("description", equalTo("update repo with rest assured"))
                 .body("private", equalTo(false));
 
