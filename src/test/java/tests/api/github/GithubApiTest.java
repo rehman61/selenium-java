@@ -95,4 +95,19 @@ public class GithubApiTest extends BaseApiClass {
 
 
     }
+
+    @Test
+    public void deleteRepo() {
+        RestAssured.baseURI = configReader.getProperty("githubApiUrl");
+//      github api token parts
+        String token = configReader.getProperty("t1")+configReader.getProperty("t2")
+                +configReader.getProperty("t3")+configReader.getProperty("t4")
+                +configReader.getProperty("t5");
+
+//      DELETE
+        RestAssured.given().auth().oauth2(token)
+                .when().delete("/repos/rehman61/repo-1")
+                .then().statusCode(204);
+
+    }
 }
