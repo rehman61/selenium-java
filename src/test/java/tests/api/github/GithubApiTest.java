@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.api.githubModel.RepoModel;
 import utils.setup.BaseApiClass;
@@ -110,4 +111,36 @@ public class GithubApiTest extends BaseApiClass {
                 .then().statusCode(204);
 
     }
+
+
+    @DataProvider(name = "repoData")
+    public Object[][] repoData() {
+        return new Object[][]{
+                {"repo-1-update",true},
+                {"selenium-java",true},
+                {"tap.az-selenium-java-testng",true},
+                {null,false}
+        };
+    }
+    @Test(dataProvider = "repoData")
+    public void getRepoData(String repoName, boolean success) {
+        RestAssured.baseURI = configReader.getProperty("githubApiUrl");
+//      github api token parts
+        String token = configReader.getProperty("t1")+configReader.getProperty("t2")
+                +configReader.getProperty("t3")+configReader.getProperty("t4")
+                +configReader.getProperty("t5");
+//
+
+        if (success) {
+            RestAssured.given().auth().oauth2(token)
+                    .when().get("/repos/rehman61/" + repoName)
+                    .then().statusCode(200).body("name", equalTo(repoName));
+        }else {
+            RestAssured.given().auth().oauth2(token)
+                    .when().get("/repos/rehman61/" + repoName)
+                    .then().statusCode(404).body("name", equalTo(repoName));
+        }
+    }
 }
+
+
